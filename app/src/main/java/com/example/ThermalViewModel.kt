@@ -19,10 +19,14 @@ class ThermalViewModel(application: Application) : AndroidViewModel(application)
     private val _threshold = MutableStateFlow(45f) // Default 45°C
     val threshold: StateFlow<Float> = _threshold
 
+    private val _deviceInfo = MutableStateFlow<DeviceInfo?>(null)
+    val deviceInfo: StateFlow<DeviceInfo?> = _deviceInfo
+
     private val notificationHelper = NotificationHelper(application)
     private var hasAlerted = false
 
     init {
+        _deviceInfo.value = DeviceUtils.getDeviceInfo(application)
         viewModelScope.launch {
             while (true) {
                 updateTemperatures()
